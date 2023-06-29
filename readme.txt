@@ -3,6 +3,7 @@
 3)sudo docker exec -it docker_app_1 bash
 4)cd /var/www/app
 5)composer install
+  php yii migrate
 6)your app will be http://localhost:8084
 7) chmod -R 777 /var/www/app/backend/web/assets
    chmod -R 777 /var/www/app/backend/runtime
