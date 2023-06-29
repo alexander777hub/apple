@@ -22,7 +22,17 @@ class AppleController extends Controller
     {
         return array_merge(
             parent::behaviors(),
-            [
+            [   'access' => [
+                'class' => AccessControl::class,
+                'only' => ['logout', 'create', 'update', 'view', 'fall-down', 'index', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'update', 'view', 'fall-down', 'index', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
