@@ -1,0 +1,4 @@
+services:
+  supercronic:
+    build: .
+    command: supercronic crontab
