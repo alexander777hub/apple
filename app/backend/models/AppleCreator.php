@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use app\models\Apple;
-use backend\interfaces\Fruit;
+use app\interfaces\Fruit;
 
 /**
  * Class AppleCreator
@@ -19,16 +19,15 @@ class AppleCreator extends Creator
         'Green',
     ];
 
-    public function createFruit(): Fruit
+    public function createFruit(int $count): Fruit
     {
         $rand = mt_rand(0, 3);
         $color = array_search(self::$colors[$rand], self::$colors);
         $apple = new Apple();
         $apple->color = $color;
-        $rand_date = date('Y-m-d-h-i-s', strtotime('-'.mt_rand(0, 2).' days'));
-
+        $rand_date = gmdate('Y-m-d-h-i-s', strtotime('-'.mt_rand(0, 2).' days'));
+        $apple->size = $apple->initial_size = floatval($count);
         $apple->date_appear = $rand_date;
-
         $apple->save(false);
         return $apple;
     }
@@ -37,9 +36,7 @@ class AppleCreator extends Creator
     {
         $creator = new self();
         $rand = mt_rand(0, 10);
-        for ($i = 0; $i<$rand; $i++) {
-            $creator->createFruit();
-        }
+        $creator->createFruit($rand);
     }
 
 }

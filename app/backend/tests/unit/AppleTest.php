@@ -3,6 +3,7 @@
 namespace backend\tests\unit;
 
 use app\models\Apple;
+use backend\models\AppleCreator;
 
 /**
  * Post model test
@@ -35,23 +36,26 @@ class AppleTest extends \Codeception\Test\Unit
         $this->assertTrue(is_float($apple->getSize()));
     }
 
-    public function testPercentToDecimal()
-    {
-        $apple = new Apple();
-
-        $this->assertTrue($apple->percentToDecimal(100) === 1.00);
-        $this->assertTrue(is_float($apple->percentToDecimal(100)));
-    }
-
     public function testEat()
     {
         $apple = new Apple();
+        $apple->initial_size = 1.00;
         $apple->spent = 50;
         $apple->status = 2;
         $apple->size = 0.5;
-        $apple->eat(25);
+        $apple->spent_value = '0.25';
+        $apple->eat();
+        $this->assertTrue($apple->size === 0.25);
         $apple->status = 1;
         $apple->eat(25);
         $this->assertTrue(!empty($apple->getErrors()));
+    }
+
+    public function testCreateFruit()
+    {
+        $creator = new AppleCreator();
+        $apple = $creator->createFruit(1);
+        $this->assertTrue($apple instanceof Apple);
+        $this->assertTrue($apple->size === 1.00);
     }
 }

@@ -10,10 +10,13 @@ use yii\widgets\ActiveForm;
 
 <div class="apple-form">
     <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'spent')->input('number', ['min'=>0,'max'=>100]) ?>
 
+    <?= $form->field($model, 'size')->input('numerical', ['readOnly' => true])->label(Yii::t('app', 'Count')) ?>
+    <?= $form->field($model, 'initial_size')->input('numerical', ['readOnly' => true])->label(Yii::t('app', 'Initial Count')) ?>
+
+    <?= $form->field($model, 'spent_value')->input('numerical')->label(Yii::t('app', 'Enter a valid value 0.01 - 1')) ?>
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Cut', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

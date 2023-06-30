@@ -1,13 +1,13 @@
 <?php
 
-namespace backend\interfaces;
+namespace app\interfaces;
 
 /**
  * Interface Fruit
  */
 interface Fruit
 {
-    public function eat(int $percent);
+    public function eat();
 
     public function fall();
 

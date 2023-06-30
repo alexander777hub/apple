@@ -15,11 +15,12 @@ class m230627_131105_create_apple_table extends Migration
         $this->createTable('{{%apple}}', [
             'id' => $this->primaryKey(),
             'color' => $this->integer()->notNull()->defaultValue(1),
-            'date_appear' =>  $this->timestamp()->null()->defaultValue(null),
-            'date_fall' =>  $this->timestamp()->null()->defaultValue(null),
+            'date_appear' => $this->timestamp()->null()->defaultValue(null),
+            'date_fall' => $this->timestamp()->null()->defaultValue(null),
             'status' => $this->integer()->notNull()->defaultValue(1),
             'spent' => $this->integer()->notNull()->defaultValue(0),
             'size' => $this->decimal(5, 2)->notNull()->defaultValue(1.00),
+            'initial_size' => $this->decimal(5, 2)->notNull()->defaultValue(1.00),
         ]);
         $this->execute("CREATE EVENT event_update_status
         ON SCHEDULE EVERY 50 SECOND

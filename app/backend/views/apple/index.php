@@ -22,8 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Apple', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]);?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -40,7 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'date_appear',
-            'size',
+            [
+                'class' => yii\grid\DataColumn::className(),
+                'attribute' => 'size',
+                 'label' => 'Count',
+            ],
             'date_fall',
             [
                 'class' => yii\grid\DataColumn::className(),
@@ -60,17 +62,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
+                'class' => yii\grid\DataColumn::className(),
+                'format'=>'html',
+                'value' => function ($model) {
+                    if($model->status != Apple::getStatusList()[Apple::STATUS_FELL]) {
+                        return '';
+                    }
+                    return Html::a(Yii::t('app', 'Изменить'), ['apple/update', 'id' => $model->id]);
+                },
+            ],
+            [
                 'class' => ActionColumn::className(),
-                'template' => '{update}{delete}',
+                'template' => '{delete}',
                 'urlCreator' => function ($action, Apple $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                },
             ],
             [
                 'class' => yii\grid\DataColumn::className(),
                 'format'=>'html',
                 'value' => function ($model) {
-                    if($model->status == 3 || $model->status == 2) {
+                if( $model->status != Apple::getStatusList()[Apple::STATUS_ON]) {
                         return '';
                     }
                     return Html::a(Yii::t('app', 'Уронить'), ['apple/fall-down', 'id' => $model->id]);
@@ -78,6 +90,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
-
 </div>

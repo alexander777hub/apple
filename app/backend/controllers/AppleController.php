@@ -94,10 +94,8 @@ class AppleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->request->isPost) {
-            $percent = $this->request->post()['Apple']['spent'];
-            if (!$model->eat(intval($percent))) {
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->validate()) {
+            if (!$model->eat()) {
                 $model->delete();
             } else {
                 if (!$model->validate(null, false)) {

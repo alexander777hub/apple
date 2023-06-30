@@ -2,7 +2,7 @@
 
 namespace backend\models;
 
-use backend\interfaces\Fruit;
+use app\interfaces\Fruit;
 
 /**
  * Class Creator
@@ -11,7 +11,7 @@ use backend\interfaces\Fruit;
  */
 abstract class Creator
 {
-    abstract public function createFruit(): Fruit;
+    abstract public function createFruit(int $count): Fruit;
 
     abstract public function generate();
 

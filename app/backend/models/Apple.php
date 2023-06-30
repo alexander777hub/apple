@@ -14,9 +14,12 @@ use Yii;
  * @property int $status
  * @property int $spent
  * @property float $size
+ * @property float $initial_size
  */
-class Apple extends \yii\db\ActiveRecord implements \backend\interfaces\Fruit
+class Apple extends \yii\db\ActiveRecord implements \app\interfaces\Fruit
 {
+
+    public string $spent_value = '';
     public const STATUS_ON = 'On the tree' ;
     public const STATUS_FELL = 'fell' ;
 
@@ -41,6 +44,12 @@ class Apple extends \yii\db\ActiveRecord implements \backend\interfaces\Fruit
         ];
     }
 
+    public function beforeValidate()
+    {
+        $this->spent_value = str_replace(',', '.', $this->spent_value);
+        return parent::beforeValidate();
+    }
+
     public static function getStatusArray()
     {
         return [
@@ -50,8 +59,6 @@ class Apple extends \yii\db\ActiveRecord implements \backend\interfaces\Fruit
         ];
     }
 
-
-
     /**
      * {@inheritdoc}
      */
@@ -59,9 +66,11 @@ class Apple extends \yii\db\ActiveRecord implements \backend\interfaces\Fruit
     {
         return [
             [['color', 'status'], 'integer'],
-            [['spent'],'integer', 'min'=>0, 'max'=>100 ],
+            [['spent'], 'integer', 'min' => 0, 'max' => 100],
             [['date_appear', 'date_fall'], 'safe'],
-            [['size'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
+            [['size'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/',],
+            [['initial_size'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
+            [['spent_value'], 'number', 'numberPattern' => '/^\s*[-+]?[0-9]*[.,]?[0-9]+([eE][-+]?[0-9]+)?\s*$/', 'min' => 0.01, 'max' => 1.00],
         ];
     }
 
@@ -85,29 +94,23 @@ class Apple extends \yii\db\ActiveRecord implements \backend\interfaces\Fruit
         return $this->size;
     }
 
-    public function percentToDecimal($percent): float
+    public function eat(): bool
     {
-        return $percent / 100.00;
-    }
-
-    public function eat(int $percent)
-    {
-        if($this->status == self::getStatusList()[self::STATUS_ON]) {
+        $percent = $this->spent_value;
+        if ($this->status == self::getStatusList()[self::STATUS_ON]) {
             $this->addError('status', 'On the tree');
         }
-        if($this->status == self::getStatusList()[self::STATUS_SPOILED]) {
+        if ($this->status == self::getStatusList()[self::STATUS_SPOILED]) {
             $this->addError('status', 'Apple is spoiled');
         }
 
-        if(!$this->getErrors()) {
-            $this->spent = $percent + $this->spent;
-
-            if ($this->spent >= 100) {
+        if (!$this->getErrors()) {
+            $this->size = $this->getSize() - $percent;
+            if ($this->getSize() <= 0) {
                 return false;
-            } else {
-                $spent_decimal = $this->percentToDecimal($percent);
-                $this->size = $this->getSize() - $spent_decimal;
             }
+            $diff = $this->initial_size - $this->getSize();
+            $this->spent = round(($diff / $this->initial_size) * 100);
         }
         return true;
     }
@@ -120,7 +123,8 @@ class Apple extends \yii\db\ActiveRecord implements \backend\interfaces\Fruit
             return false;
         } else {
             $this->status = Apple::getStatusList()[Apple::STATUS_FELL];
-            $this->date_fall = date('Y-m-d-h-i-s');
+            $this->date_fall = gmdate('Y-m-d-h-i-s');
+
             return true;
         }
 
