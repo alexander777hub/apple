@@ -25,7 +25,7 @@ class m230627_131105_create_apple_table extends Migration
         $this->execute("CREATE EVENT event_update_status
         ON SCHEDULE EVERY 50 SECOND
         DO
-        UPDATE apple SET status = IF(apple.date_fall IS NOT NULL AND TIMESTAMPDIFF(HOUR, apple.date_fall, NOW()) > 1, 3, apple.status);");
+        UPDATE apple SET status = IF(apple.date_fall IS NOT NULL AND TIMESTAMPDIFF(HOUR, apple.date_fall, NOW()) >= 1, 3, apple.status);");
     }
 
     /**

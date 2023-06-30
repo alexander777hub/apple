@@ -18,7 +18,6 @@ use Yii;
  */
 class Apple extends \yii\db\ActiveRecord implements \app\interfaces\Fruit
 {
-
     public string $spent_value = '';
     public const STATUS_ON = 'On the tree' ;
     public const STATUS_FELL = 'fell' ;
@@ -125,6 +124,7 @@ class Apple extends \yii\db\ActiveRecord implements \app\interfaces\Fruit
             $this->status = Apple::getStatusList()[Apple::STATUS_FELL];
             $this->date_fall = gmdate('Y-m-d-h-i-s');
 
+            $this->date_fall = gmdate('Y-m-d-h-i-s');
             return true;
         }
 

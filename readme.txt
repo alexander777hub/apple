@@ -1,4 +1,4 @@
-1) go to project-dir
+1)cd apple
 2)sudo  docker-compose -f docker/docker-compose.yml up -d
 3)sudo docker exec -it docker_app_1 bash
 4)cd /var/www/app

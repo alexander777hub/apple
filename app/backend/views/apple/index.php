@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => yii\grid\DataColumn::className(),
                 'format'=>'html',
                 'value' => function ($model) {
-                if( $model->status != Apple::getStatusList()[Apple::STATUS_ON]) {
+                    if($model->status != Apple::getStatusList()[Apple::STATUS_ON]) {
                         return '';
                     }
                     return Html::a(Yii::t('app', 'Уронить'), ['apple/fall-down', 'id' => $model->id]);
