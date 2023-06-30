@@ -117,16 +117,14 @@ class Apple extends \yii\db\ActiveRecord implements \app\interfaces\Fruit
 
     public function fall()
     {
-        if($this->status == self::getStatusList()[self::STATUS_FELL]) {
+        if ($this->status == self::getStatusList()[self::STATUS_FELL]) {
             $this->addError('status', 'Already fell');
             return false;
         } else {
             $this->status = Apple::getStatusList()[Apple::STATUS_FELL];
             $this->date_fall = gmdate('Y-m-d-h-i-s');
 
-            $this->date_fall = gmdate('Y-m-d-h-i-s');
             return true;
         }
-
     }
 }
